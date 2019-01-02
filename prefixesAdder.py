@@ -76,11 +76,8 @@ if hasKeyframes == True:
         if keyframesPosition >= 0:
             shallRepeat = True
             startsAtKF = keyframesPosition+1
-            print 'startsAtKF', startsAtKF
             findEnd = textModified.find('}',startsAtKF)
-            print 'end', findEnd
             toInclude = '@-webkit-keyframes'+textModified[startsAtKF+10:findEnd+1]+'\n'+'@-moz-keyframes'+textModified[startsAtKF+10:findEnd+1]+'\n'+'@-webkit-keyframes'+textModified[startsAtKF+10:findEnd+1]
-            print toInclude
             textModified = textModified[:keyframesPosition]+toInclude+textModified[findEnd+1:]         
     newfile.close()
 
