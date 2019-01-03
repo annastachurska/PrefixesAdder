@@ -1,3 +1,5 @@
+import re
+
 prefixDictionary = {
     'webkit': ['align-content', 'align-items', 'align-self', 'animation', 'animation-delay', 'animation-direction', 'animation-duration', 'animation-fill-mode', 'animation-iteration-count', 'animation-name', 'animation-play-state', 'animation-timing-function', 'backface-visibility', 'background-size', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-image', 'border-radius', 'border-top-left-radius', 'border-top-right-radius', 'box-decoration-break', 'box-shadow', 'box-sizing', 'column-count', 'column-fill', 'column-gap', 'column-rule', 'column-rule-color', 'column-rule-style', 'column-span', 'column-rule-width', 'columns', 'filter', 'flex', 'flex-basis', 'flex-direction', 'flex-flow', 'flex-grow', 'flex-shrink', 'flex-wrap', 'font-kerning', 'hyphens', 'justify-content', 'order', 'perspective', 'perspective-origin', 'text-decoration-color', 'text-decoration-line', 'transform', 'transform(2D)', 'transform(3D)', 'transform-origin', 'transition', 'transition-delay', 'transition-duration', 'transition-property', 'transition-timing-function', 'user-select'],
     'ms': ['flex', 'hyphens', 'overflow-x', 'overflow-y', 'transform', 'transform(2D)', 'transform-origin', 'transform-style', 'user-select'],
@@ -17,15 +19,20 @@ prefixSpecialComplex = {
     'opacity: ': 'filter: alpha(opacity='
 }
 
-newfile = open('modified.css', 'w')
-name = 'style.css'
-hasKeyframes = False
-
+name = raw_input('Enter the name of css file:')
+if not name.endswith('.css'): 
+    print 'It is not a css file.' 
+    exit()
 try: 
     fhand = open(name, 'r')
 except:
-    print 'There is no file style in selected localization'
+    print 'There is no', name, 'file in main folder of Python'
     exit()
+
+nameModified = raw_input('Enter the name under which new file will be saved:')
+newfile = open(nameModified, 'w')
+
+hasKeyframes = False
 
 for x in fhand:
     listX = x.strip().split(' ')
@@ -56,49 +63,36 @@ for x in fhand:
                     except:
                         print 'Wrong syntax, the opacity value was not converted properly'
             newfile.write(addline)
-
     newfile.write(x)
-
 newfile.close()
 
-
 if hasKeyframes == True:
-    newfile = open('modified.css', 'r+')
+    newfile = open(nameModified, 'r+')
     textModified = newfile.read()
-    print 'write', textModified[:10]
-    shallRepeat = True
-    startsAtKF = 0
-    keyFramesPrefixes = ['@-webkit-keyframes', '@-moz-keyframes', '@-o-keyframes'] 
-    while shallRepeat:
-        shallRepeat = False    
-        keyframesPosition = textModified.find('@keyframes',startsAtKF)
-        print keyframesPosition
-        if keyframesPosition >= 0:
-            shallRepeat = True
-            startsAtKF = keyframesPosition+1
-            findEnd = textModified.find('}',startsAtKF)
-            toInclude = '@-webkit-keyframes'+textModified[startsAtKF+10:findEnd+1]+'\n'+'@-moz-keyframes'+textModified[startsAtKF+10:findEnd+1]+'\n'+'@-webkit-keyframes'+textModified[startsAtKF+10:findEnd+1]
-            textModified = textModified[:keyframesPosition]+toInclude+textModified[findEnd+1:]         
+    keyframesPositions = re.finditer('@keyframes', textModified)
+    listOfPositions = list()
+    for match in keyframesPositions:
+        listOfPositions.append(match.start())
+    listOfPositions.sort(reverse=True)
+    for position in listOfPositions:
+        findEnd = textModified.find('}', position)
+        basicFragment = textModified[position+11:findEnd+1]
+        nr1 = len(re.findall('{', basicFragment))
+        nr2 = len(re.findall('}', basicFragment))
+        while nr1 != nr2:
+            if len(re.findall('{',textModified)) != len(re.findall('}',textModified)):
+                print 'The number of { and } signs in your document do not match. Please correct it.'
+                exit()
+            findEnd = textModified.find('}', findEnd+1)
+            basicFragment = textModified[position+11:findEnd+1]
+            nr1 = len(re.findall('{', basicFragment))
+            nr2 = len(re.findall('}', basicFragment))
+        toInclude = '@-webkit-keyframes '+basicFragment+'\n'+'@-moz-keyframes '+basicFragment+'\n'+'@-o-keyframes '+basicFragment+'\n'
+        firstPart = textModified[:position]
+        secondPart = textModified[position:]
+        textModified = firstPart + toInclude + secondPart
+    newfile.close()     
+    newfile = open(nameModified, 'w')
+    newfile.write(textModified)
     newfile.close()
-
-
-
-
-
- 
-
-    
-
-
-
-
-
   
-
-
-
-    
-
-
-
-
