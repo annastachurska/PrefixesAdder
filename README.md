@@ -1,8 +1,8 @@
 # PrefixesAdder
-Program written in Python adding prefixes to css files.
+Program written in Python adding prefixes to css file.
 
-A python program that creates new file ('modified.css') based on 'style.css' file in which the prefixes ('-webkit-', '-moz-', '-ms-' and '-o-') are incorporated. 
+**Description** A Python program that creates new file based on .css file pointed out by the user in which the prefixes ('-webkit-', '-moz-', '-ms-' and '-o-') are incorporated. 
 
-For working you have to install Python, dowload prefixesAdder.py and run cmd line(for Windows). in cms line run python from the main folder of installed Python. File 'style.css' shall be located in the main Python folder. File 'modified.css' will be created in the same folder.  
+**Installation** For working you have to install Python, dowload prefixesAdder.py and run cmd line(for Windows). In cmd line run PrefixesAdder.py using Python from the main folder of installed Python (paste: python PrefixesAdder.py). Css file have to be located in the main Python folder. Modified file will be created under the name selected by the user in the same folder (in case that the file with selected name exists it will be overwritten).   
 
-Status: in progress - handling keyframes is not finished.
+**Status** completed.
