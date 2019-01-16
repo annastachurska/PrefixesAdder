@@ -19,17 +19,17 @@ prefixSpecialComplex = {
     'opacity: ': 'filter: alpha(opacity='
 }
 
-name = raw_input('Enter the name of css file:')
+name = input('Enter the name of css file:')
 if not name.endswith('.css'): 
-    print 'It is not a css file.' 
+    print('It is not a css file.') 
     exit()
 try: 
     fhand = open(name, 'r')
 except:
-    print 'There is no', name, 'file in main folder of Python'
+    print('There is no', name, 'file in main folder of Python')
     exit()
 
-nameModified = raw_input('Enter the name under which new file will be saved:')
+nameModified = input('Enter the name under which new file will be saved:')
 newfile = open(nameModified, 'w')
 
 hasKeyframes = False
@@ -61,7 +61,7 @@ for x in fhand:
                         valueO = float(valueOpacity)
                         addline = addline.replace(valueOpacity, str(100*valueO))
                     except:
-                        print 'Wrong syntax, the opacity value was not converted properly'
+                        print('Wrong syntax, the opacity value was not converted properly')
             newfile.write(addline)
     newfile.write(x)
 newfile.close()
@@ -81,7 +81,7 @@ if hasKeyframes == True:
         nr2 = len(re.findall('}', basicFragment))
         while nr1 != nr2:
             if len(re.findall('{',textModified)) != len(re.findall('}',textModified)):
-                print 'The number of { and } signs in your document do not match. Please correct it.'
+                print('The number of { and } signs in your document do not match. Please correct it.')
                 exit()
             findEnd = textModified.find('}', findEnd+1)
             basicFragment = textModified[position+11:findEnd+1]
